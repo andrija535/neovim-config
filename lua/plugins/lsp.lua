@@ -65,7 +65,10 @@ return {
   lazy = false,
   config = function()
     vim.lsp.enable('phpactor')
+
     vim.lsp.config('lua_ls', lua_config_options)
+    vim.lsp.enable('lua_ls')
+
     vim.api.nvim_create_autocmd('LspAttach', {
       callback = function(args)
 	on_attach(nil, args.buf)
