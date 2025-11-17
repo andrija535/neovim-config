@@ -48,15 +48,6 @@ lua_config_options = {
 }
 
 function on_attach(_,buffer)
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = buffer, desc = 'Go to Definition' })
-
-  vim.keymap.set('n', 'gtd', function() 
-    vim.cmd('vsplit')
-    vim.lsp.buf.definition() 
-  end, { buffer = buffer, desc = 'Go to Definition' })
-
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, { buffer = buffer, desc = 'Go to References' })
-
   vim.keymap.set('n', 'ge', vim.diagnostic.open_float, { buffer = buffer, desc = 'Show Line Diagnostics' })
 end
 
