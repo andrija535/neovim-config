@@ -11,6 +11,7 @@
   "nvim-treesitter-textobjects": { "branch": "master", "commit": "5ca4aaa6efdcc59be46b95a3e876300cfead05ef" },
   "nvim-web-devicons": { "branch": "master", "commit": "8dcb311b0c92d460fac00eac706abd43d94d68af" },
   "ocaml.nvim": { "branch": "main", "commit": "6af589d1f1ee63bfcfa0bab4450f8eb56e5c068d" },
+  "plainline": { "branch": "main", "commit": "8aad5df1cb3456d4cbc2413e98c4f6d2a80d2de4" },
   "plenary.nvim": { "branch": "master", "commit": "b9fd5226c2f76c951fc8ed5923d85e4de065e509" },
   "tokyonight.nvim": { "branch": "main", "commit": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd" }
 }
