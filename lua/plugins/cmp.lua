@@ -28,7 +28,5 @@ return {
 	['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
       })
     })
-
-    local capabilities = require('cmp_nvim_lsp').default_capabilities()
   end
 }
