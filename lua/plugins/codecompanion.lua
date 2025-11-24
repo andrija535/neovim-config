@@ -10,6 +10,7 @@ return {
       }
     }
   },
+  cmd = {"CodeCompanion", "CodeCompanionChat"},
   keys = {
     {"<leader>cc", "<cmd>CodeCompanionChat<cr>", desc = "Code Companion Chat"},
     {"<leader>ci", "<cmd>CodeCompanion<cr>", desc = "Code Companion Inline"},
