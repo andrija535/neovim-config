@@ -8,7 +8,6 @@
   "nvim-cmp": { "branch": "main", "commit": "d97d85e01339f01b842e6ec1502f639b080cb0fc" },
   "nvim-lspconfig": { "branch": "master", "commit": "a2a277114dbb93e98f04b5087a9b832918b7da15" },
   "nvim-treesitter": { "branch": "main", "commit": "bb83a676128d95c865e40ba71376d883bdadec14" },
-  "nvim-treesitter-textobjects": { "branch": "master", "commit": "5ca4aaa6efdcc59be46b95a3e876300cfead05ef" },
   "nvim-web-devicons": { "branch": "master", "commit": "8dcb311b0c92d460fac00eac706abd43d94d68af" },
   "ocaml.nvim": { "branch": "main", "commit": "6af589d1f1ee63bfcfa0bab4450f8eb56e5c068d" },
   "plainline": { "branch": "main", "commit": "8aad5df1cb3456d4cbc2413e98c4f6d2a80d2de4" },
