@@ -1,21 +1,21 @@
 return {
-  "olimorris/codecompanion.nvim",
+  'olimorris/codecompanion.nvim',
   opts = {
     display = {
       chat = {
 	window = {
-	  layout = "vertical",
+	  layout = 'vertical',
 	  width = 0.25
 	}
       }
     }
   },
-  cmd = {"CodeCompanion", "CodeCompanionChat"},
+  cmd = {'CodeCompanion', 'CodeCompanionChat'},
   keys = {
-    {"<leader>cc", "<cmd>CodeCompanionChat<cr>", desc = "Code Companion Chat"},
-    {"<leader>ci", "<cmd>CodeCompanion<cr>", desc = "Code Companion Inline"},
+    {'<leader>cc', '<cmd>CodeCompanionChat<cr>', desc = 'Code Companion Chat'},
+    {'<leader>ci', '<cmd>CodeCompanion<cr>', mode = {'n','v'}, desc = 'Code Companion Inline'},
   },
   dependencies = {
-    "nvim-lua/plenary.nvim",
+    'nvim-lua/plenary.nvim',
   },
 }
