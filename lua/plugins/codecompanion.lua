@@ -9,14 +9,6 @@ return {
 	}
       }
     },
-    -- This doesn't work, for some reason
-    memory = {
-      opts = {
-	chat = {
-	  default_memory = {'default'}
-	}
-      }
-    },
     -- This whole ordeal is for setting the default Copilot model
     adapters = {
       http = {
