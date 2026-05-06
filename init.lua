@@ -10,3 +10,10 @@ vim.keymap.set('i', '<S-Tab>', 'copilot#Accept("\\<S-Tab>")', { expr = true, rep
 
 -- Default colour scheme
 vim.cmd('colorscheme cyberdream')
+
+-- Auto-update packages
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = function()
+    require('lazy').update({show = false})
+  end,
+})

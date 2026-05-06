@@ -3,42 +3,26 @@ lua_config_options = {
     if client.workspace_folders then
       local path = client.workspace_folders[1].name
       if
-	path ~= vim.fn.stdpath('config')
-	and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
-	then
-	  return
+        path ~= vim.fn.stdpath('config')
+        and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
+      then
+        return
       end
     end
 
     client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
       runtime = {
-	-- Tell the language server which version of Lua you're using (most
-	-- likely LuaJIT in the case of Neovim)
-	version = 'LuaJIT',
-	-- Tell the language server how to find Lua modules same way as Neovim
-	-- (see `:h lua-module-load`)
-	path = {
-	  'lua/?.lua',
-	  'lua/?/init.lua',
+        version = 'LuaJIT',
+        path = {
+          'lua/?.lua',
+          'lua/?/init.lua',
+        },
       },
-    },
-    -- Make the server aware of Neovim runtime files
-    workspace = {
-      checkThirdParty = false,
-      library = {
-	vim.env.VIMRUNTIME
-	-- Depending on the usage, you might want to add additional paths
-	-- here.
-	-- '${3rd}/luv/library'
-	-- '${3rd}/busted/library'
-      }
-      -- Or pull in all of 'runtimepath'.
-      -- NOTE: this is a lot slower and will cause issues when working on
-      -- your own configuration.
-      -- See https://github.com/neovim/nvim-lspconfig/issues/3189
-      -- library = {
-	--   vim.api.nvim_get_runtime_file('', true),
-	-- }
+      workspace = {
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME
+        }
       }
     })
   end,
@@ -47,7 +31,57 @@ lua_config_options = {
   }
 }
 
-function on_attach(_,buffer)
+local function phpactor_rename()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local intel = vim.lsp.get_clients({ bufnr = bufnr, name = 'intelephense' })[1]
+
+  local function rename_with_phpactor()
+    local actor = vim.lsp.get_clients({ bufnr = bufnr, name = 'phpactor' })[1]
+    if actor then
+      vim.lsp.buf.rename(nil, { filter = function(c) return c.name == 'phpactor' end })
+      return
+    end
+
+    local client_id = vim.lsp.start({
+      name = 'phpactor',
+      cmd = { 'phpactor', 'language-server' },
+      root_dir = vim.fs.root(0, { '.git', 'composer.json' }),
+      handlers = {
+        ['textDocument/publishDiagnostics'] = function() end,
+      },
+    })
+
+    if not client_id then
+      vim.notify('phpactor: failed to start', vim.log.levels.ERROR)
+      return
+    end
+
+    vim.api.nvim_create_autocmd('LspAttach', {
+      once = true,
+      callback = function(args)
+        if args.data.client_id == client_id then
+          vim.lsp.buf.rename(nil, { filter = function(c) return c.name == 'phpactor' end })
+        end
+      end,
+    })
+  end
+
+  if not intel then
+    rename_with_phpactor()
+    return
+  end
+
+  local params = vim.lsp.util.make_position_params(0, intel.offset_encoding)
+  intel:request('textDocument/prepareRename', params, function(err, result)
+    if not err and result then
+      vim.lsp.buf.rename(nil, { filter = function(c) return c.name == 'intelephense' end })
+    else
+      rename_with_phpactor()
+    end
+  end, bufnr)
+end
+
+function on_attach(_, buffer)
   vim.keymap.set('n', 'ge', vim.diagnostic.open_float, { buffer = buffer, desc = 'Show Line Diagnostics' })
 end
 
@@ -55,14 +89,19 @@ return {
   'neovim/nvim-lspconfig',
   lazy = false,
   config = function()
-    vim.lsp.enable('phpactor')
+    vim.lsp.enable('intelephense')
 
     vim.lsp.config('lua_ls', lua_config_options)
     vim.lsp.enable('lua_ls')
 
     vim.api.nvim_create_autocmd('LspAttach', {
       callback = function(args)
-	on_attach(nil, args.buf)
+        on_attach(nil, args.buf)
+        local client = vim.lsp.get_client_by_id(args.data.client_id)
+        if client and client.name == 'intelephense' then
+          vim.keymap.set('n', 'grn', phpactor_rename,
+            { buffer = args.buf, desc = 'Rename (intelephense → phpactor fallback)' })
+        end
       end
     })
   end
